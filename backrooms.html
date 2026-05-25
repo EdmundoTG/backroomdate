@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>INVITACION.EXE</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Courier New', monospace;
+}
+
+body{
+    background:#000;
+    overflow:hidden;
+    color:#ffe27a;
+}
+
+video.bg{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    filter:brightness(0.25) blur(1px);
+    z-index:-2;
+}
+
+.overlay{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.45);
+    z-index:-1;
+}
+
+.container{
+    width:100%;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.card{
+    width:100%;
+    max-width:420px;
+    background:rgba(0,0,0,.55);
+    border:1px solid rgba(255,226,122,.25);
+    backdrop-filter:blur(10px);
+    border-radius:18px;
+    padding:30px;
+    text-align:center;
+    box-shadow:0 0 30px rgba(255,226,122,.15);
+    animation:fadeIn 1s ease;
+}
+
+h1{
+    font-size:30px;
+    margin-bottom:20px;
+    text-shadow:0 0 10px rgba(255,226,122,.4);
+}
+
+p{
+    font-size:18px;
+    line-height:1.5;
+    margin-bottom:25px;
+}
+
+.buttons{
+    position:relative;
+    height:140px;
+}
+
+button{
+    border:none;
+    padding:14px 28px;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:18px;
+    transition:.2s;
+}
+
+#yesBtn{
+    background:#ffe27a;
+    color:#000;
+    box-shadow:0 0 20px rgba(255,226,122,.4);
+}
+
+#yesBtn:hover{
+    transform:scale(1.05);
+}
+
+#noBtn{
+    background:#111;
+    color:#fff;
+    position:absolute;
+    left:30px;
+    top:50px;
+}
+
+.option{
+    width:100%;
+    background:#111;
+    color:#ffe27a;
+    margin-top:15px;
+    border:1px solid rgba(255,226,122,.2);
+}
+
+.option:hover{
+    background:#ffe27a;
+    color:#000;
+}
+
+.hidden{
+    display:none;
+}
+
+.final{
+    font-size:28px;
+    line-height:1.5;
+}
+
+.small{
+    margin-top:20px;
+    opacity:.7;
+    font-size:14px;
+}
+
+.glitch{
+    animation:glitch 1s infinite;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes glitch{
+    0%{transform:translate(0)}
+    20%{transform:translate(-1px,1px)}
+    40%{transform:translate(1px,-1px)}
+    60%{transform:translate(-1px,0)}
+    80%{transform:translate(1px,1px)}
+    100%{transform:translate(0)}
+}
+</style>
+</head>
+
+<body>
+
+<!-- VIDEO BACKROOM -->
+<video autoplay muted loop class="bg">
+<source src="https://cdn.pixabay.com/video/2023/09/28/182462-869511260_large.mp4" type="video/mp4">
+</video>
+
+<div class="overlay"></div>
+
+<!-- AUDIO -->
+<audio autoplay loop>
+<source src="https://cdn.pixabay.com/audio/2022/10/25/audio_d4c1b5f37e.mp3" type="audio/mp3">
+</audio>
+
+<div class="container">
+
+<!-- PANTALLA 1 -->
+<div class="card" id="screen1">
+
+<h1 class="glitch">INVITACION.EXE</h1>
+
+<p>
+¿Quieres salir conmigo para perdernos en un backroom?
+</p>
+
+<div class="buttons">
+<button id="yesBtn">Sí</button>
+<button id="noBtn">No</button>
+</div>
+
+<p class="small">(No puedes escapar)</p>
+
+</div>
+
+<!-- PANTALLA 2 -->
+<div class="card hidden" id="screen2">
+
+<h1>Selecciona una fecha</h1>
+
+<button class="option" onclick="selectDate('28 de Mayo')">
+28 de Mayo
+</button>
+
+<button class="option" onclick="selectDate('29 de Mayo')">
+29 de Mayo
+</button>
+
+<button class="option" onclick="selectDate('30 de Mayo')">
+30 de Mayo
+</button>
+
+</div>
+
+<!-- PANTALLA 3 -->
+<div class="card hidden" id="screen3">
+
+<h1>¿A qué hora?</h1>
+
+<button class="option" onclick="finish('8:00 PM')">8:00 PM</button>
+<button class="option" onclick="finish('9:00 PM')">9:00 PM</button>
+<button class="option" onclick="finish('10:00 PM')">10:00 PM</button>
+<button class="option" onclick="finish('11:00 PM')">11:00 PM</button>
+
+</div>
+
+<!-- FINAL -->
+<div class="card hidden" id="screen4">
+
+<h1>ACEPTACIÓN CONFIRMADA</h1>
+
+<p class="final">
+Perfecto gracias por aceptar voluntariamente.<br><br>
+
+Manda screenshot de esta pantalla al chico guapo que te mandó la invitación.<br><br>
+</p>
+
+<p class="small" id="summary"></p>
+
+</div>
+
+</div>
+
+<script>
+
+const noBtn = document.getElementById("noBtn");
+
+noBtn.addEventListener("mouseover", () => {
+
+const x = Math.floor(Math.random()*250);
+const y = Math.floor(Math.random()*90);
+
+noBtn.style.left = `${x}px`;
+noBtn.style.top = `${y}px`;
+
+});
+
+document.getElementById("yesBtn").addEventListener("click", () => {
+
+document.getElementById("screen1").classList.add("hidden");
+document.getElementById("screen2").classList.remove("hidden");
+
+});
+
+let selectedDate = "";
+
+function selectDate(date){
+
+selectedDate = date;
+
+document.getElementById("screen2").classList.add("hidden");
+document.getElementById("screen3").classList.remove("hidden");
+
+}
+
+function finish(hour){
+
+document.getElementById("screen3").classList.add("hidden");
+document.getElementById("screen4").classList.remove("hidden");
+
+document.getElementById("summary").innerText =
+`Fecha elegida: ${selectedDate} | Hora: ${hour}`;
+
+}
+
+</script>
+
+</body>
+</html>
